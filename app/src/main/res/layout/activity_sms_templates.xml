@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="15dp">
+    <EditText
+        android:id="@+id/template_message"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:hint="Message"
+        />
+    <Button
+        android:id="@+id/set_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/colorAccent"
+        android:textColor="#FFFFFF"
+        android:text="SET"/>
+
+    <RadioGroup
+        android:id="@+id/radioGrpSim"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp">
+
+        <RadioButton
+            android:id="@+id/radioSim1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="sim 1"
+            android:checked="true" />
+
+        <RadioButton
+            android:id="@+id/radioSim2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="sim 2" />
+
+    </RadioGroup>
+
+    <Button
+        android:id="@+id/btnSetSim"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Set"
+        android:background="@color/colorAccent"
+        android:textColor="#FFFFFF"
+        />
+
+    <CheckBox
+        android:id="@+id/onIncomingCallStarted"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Send SMS on incoming call started" />
+
+    <CheckBox
+        android:id="@+id/onIncomingCallEnded"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Send SMS on incoming call ended" />
+
+    <CheckBox
+        android:id="@+id/onOutgoingCallStarted"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Send SMS on outgoing call started" />
+
+    <CheckBox
+        android:id="@+id/onOutgoingCallEnded"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Send SMS on outgoing call ended" />
+
+    <CheckBox
+        android:id="@+id/onMissedCall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Send SMS on missed call" />
+
+</LinearLayout>
