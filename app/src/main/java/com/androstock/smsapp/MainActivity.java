@@ -1,7 +1,9 @@
 package com.androstock.smsapp;
 
 import android.Manifest;
+import android.accessibilityservice.AccessibilityService;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -10,9 +12,11 @@ import android.database.MergeCursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -34,7 +38,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity
+{
 
     static final int REQUEST_PERMISSION_KEY = 1;
     ArrayList<HashMap<String, String>> smsList = new ArrayList<HashMap<String, String>>();
@@ -71,6 +76,35 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(MainActivity.this, NewSmsActivity.class));
             }
         });
+
+        if (!isAccessibilityOn(MainActivity.this, WhatsappAccessibilityService.class)) {
+            Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
+            startActivity(intent);
+            return;
+        }
+    }
+
+    private boolean isAccessibilityOn(Context context, Class<? extends AccessibilityService> clazz) {
+        int accessibilityEnabled = 0;
+        final String service = context.getPackageName() + "/" + clazz.getCanonicalName();
+        try {
+            accessibilityEnabled = Settings.Secure.getInt(context.getApplicationContext().getContentResolver(), Settings.Secure.ACCESSIBILITY_ENABLED);
+        } catch (Settings.SettingNotFoundException ignored) {
+        }
+        TextUtils.SimpleStringSplitter colonSplitter = new TextUtils.SimpleStringSplitter(':');
+        if (accessibilityEnabled == 1) {
+            String settingValue = Settings.Secure.getString(context.getApplicationContext().getContentResolver(), Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES);
+            if (settingValue != null) {
+                colonSplitter.setString(settingValue);
+                while (colonSplitter.hasNext()) {
+                    String accessibilityService = colonSplitter.next();
+                    if (accessibilityService.equalsIgnoreCase(service)) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     public void setPref(){
@@ -302,66 +336,67 @@ public class MainActivity extends AppCompatActivity {
     public void onStart() {
         super.onStart();
     }
-}
 
-class InboxAdapter extends BaseAdapter {
-    private Activity activity;
-    private ArrayList<HashMap< String, String >> data;
-    public InboxAdapter(Activity a, ArrayList < HashMap < String, String >> d) {
-        activity = a;
-        data = d;
-    }
-    public int getCount() {
-        return data.size();
-    }
-    public Object getItem(int position) {
-        return position;
-    }
-    public long getItemId(int position) {
-        return position;
-    }
-
-    public View getView(int position, View convertView, ViewGroup parent) {
-        InboxViewHolder holder = null;
-        if (convertView == null) {
-            holder = new InboxViewHolder();
-            convertView = LayoutInflater.from(activity).inflate(
-                    R.layout.conversation_list_item, parent, false);
-
-            holder.inbox_thumb = (ImageView) convertView.findViewById(R.id.inbox_thumb);
-            holder.inbox_user = (TextView) convertView.findViewById(R.id.inbox_user);
-            holder.inbox_msg = (TextView) convertView.findViewById(R.id.inbox_msg);
-            holder.inbox_date = (TextView) convertView.findViewById(R.id.inbox_date);
-
-            convertView.setTag(holder);
-        } else {
-            holder = (InboxViewHolder) convertView.getTag();
+    class InboxAdapter extends BaseAdapter {
+        private Activity activity;
+        private ArrayList<HashMap< String, String >> data;
+        public InboxAdapter(Activity a, ArrayList < HashMap < String, String >> d) {
+            activity = a;
+            data = d;
         }
-        holder.inbox_thumb.setId(position);
-        holder.inbox_user.setId(position);
-        holder.inbox_msg.setId(position);
-        holder.inbox_date.setId(position);
+        public int getCount() {
+            return data.size();
+        }
+        public Object getItem(int position) {
+            return position;
+        }
+        public long getItemId(int position) {
+            return position;
+        }
 
-        HashMap < String, String > song = new HashMap < String, String > ();
-        song = data.get(position);
-        try {
-            holder.inbox_user.setText(song.get(Function.KEY_NAME));
-            holder.inbox_msg.setText(song.get(Function.KEY_MSG));
-            holder.inbox_date.setText(song.get(Function.KEY_TIME));
+        public View getView(int position, View convertView, ViewGroup parent) {
+            InboxViewHolder holder = null;
+            if (convertView == null) {
+                holder = new InboxViewHolder();
+                convertView = LayoutInflater.from(activity).inflate(
+                        R.layout.conversation_list_item, parent, false);
 
-            String firstLetter = String.valueOf(song.get(Function.KEY_NAME).charAt(0));
-            ColorGenerator generator = ColorGenerator.MATERIAL;
-            int color = generator.getColor(getItem(position));
-            TextDrawable drawable = TextDrawable.builder()
-                    .buildRound(firstLetter, color);
-            holder.inbox_thumb.setImageDrawable(drawable);
-        } catch (Exception e) {}
-        return convertView;
+                holder.inbox_thumb = (ImageView) convertView.findViewById(R.id.inbox_thumb);
+                holder.inbox_user = (TextView) convertView.findViewById(R.id.inbox_user);
+                holder.inbox_msg = (TextView) convertView.findViewById(R.id.inbox_msg);
+                holder.inbox_date = (TextView) convertView.findViewById(R.id.inbox_date);
+
+                convertView.setTag(holder);
+            } else {
+                holder = (InboxViewHolder) convertView.getTag();
+            }
+            holder.inbox_thumb.setId(position);
+            holder.inbox_user.setId(position);
+            holder.inbox_msg.setId(position);
+            holder.inbox_date.setId(position);
+
+            HashMap < String, String > song = new HashMap < String, String > ();
+            song = data.get(position);
+            try {
+                holder.inbox_user.setText(song.get(Function.KEY_NAME));
+                holder.inbox_msg.setText(song.get(Function.KEY_MSG));
+                holder.inbox_date.setText(song.get(Function.KEY_TIME));
+
+                String firstLetter = String.valueOf(song.get(Function.KEY_NAME).charAt(0));
+                ColorGenerator generator = ColorGenerator.MATERIAL;
+                int color = generator.getColor(getItem(position));
+                TextDrawable drawable = TextDrawable.builder()
+                        .buildRound(firstLetter, color);
+                holder.inbox_thumb.setImageDrawable(drawable);
+            } catch (Exception e) {}
+            return convertView;
+        }
+    }
+
+    class InboxViewHolder {
+        ImageView inbox_thumb;
+        TextView inbox_user, inbox_msg, inbox_date;
     }
 }
 
 
-class InboxViewHolder {
-    ImageView inbox_thumb;
-    TextView inbox_user, inbox_msg, inbox_date;
-}

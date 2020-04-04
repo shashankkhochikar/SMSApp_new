@@ -1,0 +1,64 @@
+package com.androstock.smsapp;
+
+import android.accessibilityservice.AccessibilityService;
+import android.content.SharedPreferences;
+import android.os.Build;
+import android.support.v4.view.accessibility.AccessibilityNodeInfoCompat;
+import android.view.accessibility.AccessibilityEvent;
+import android.view.accessibility.AccessibilityNodeInfo;
+
+import java.util.List;
+
+public class WhatsappAccessibilityService extends AccessibilityService {
+
+    @Override
+    public void onAccessibilityEvent (AccessibilityEvent event) {
+        try {
+            if (getRootInActiveWindow () == null) {
+                return;
+            }
+
+            AccessibilityNodeInfoCompat rootInActiveWindow = AccessibilityNodeInfoCompat.wrap (getRootInActiveWindow ());
+
+            // Whatsapp send button id
+            List<AccessibilityNodeInfoCompat> sendMessageNodeInfoList = rootInActiveWindow.findAccessibilityNodeInfosByViewId("com.whatsapp:id/send");
+            if (sendMessageNodeInfoList == null || sendMessageNodeInfoList.isEmpty()) {
+                return;
+            }
+
+            AccessibilityNodeInfoCompat sendMessageButton = sendMessageNodeInfoList.get(0);
+            if (!sendMessageButton.isVisibleToUser()) {
+                return;
+            }
+
+            if(PhonecallReceiver.lastState >= 0 || PhonecallReceiver.lastState > 0) {
+                // Now fire a click on the send button
+                sendMessageButton.performAction(AccessibilityNodeInfo.ACTION_CLICK);
+
+                Thread.sleep(1000); // hack for certain devices in which the immediate back click is too fast to handle
+                performGlobalAction(GLOBAL_ACTION_BACK);
+                Thread.sleep(1000);  // same hack as above
+                performGlobalAction(GLOBAL_ACTION_BACK);
+                /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    disableSelf();
+                }*/
+                PhonecallReceiver.lastState = -1;
+            }
+
+
+            // Now go back to your app by clicking on the Android back button twice:
+            // First one to leave the conversation screen
+            // Second one to leave whatsapp
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    @Override
+    public void onInterrupt() {
+        System.out.println("Whatsapp Accessibility Service onInterrupt");
+    }
+}

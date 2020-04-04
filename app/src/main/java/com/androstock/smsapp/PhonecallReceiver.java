@@ -9,13 +9,15 @@ import android.content.SharedPreferences;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+import android.view.accessibility.AccessibilityManager;
 import android.widget.Toast;
 
+import static android.content.Context.ACCESSIBILITY_SERVICE;
 import static android.content.Context.MODE_PRIVATE;
 
 public class PhonecallReceiver extends BroadcastReceiver {
 
-    private static int lastState = TelephonyManager.CALL_STATE_IDLE;
+    public static int lastState = TelephonyManager.CALL_STATE_IDLE;
     private static Date callStartTime;
     private static boolean isIncoming;
     private static String savedNumber;
@@ -25,8 +27,10 @@ public class PhonecallReceiver extends BroadcastReceiver {
     SharedPreferences.Editor editor;
 
     @Override
-    public void onReceive(Context context, Intent intent) {
-        if (intent.getAction().equals("android.intent.action.NEW_OUTGOING_CALL")) {
+    public void onReceive(Context context, Intent intent)
+    {
+        if (intent.getAction().equals("android.intent.action.NEW_OUTGOING_CALL"))
+        {
             savedNumber = intent.getExtras().getString("android.intent.extra.PHONE_NUMBER");
         } else {
             String stateStr = intent.getExtras().getString(TelephonyManager.EXTRA_STATE);
@@ -104,6 +108,7 @@ public class PhonecallReceiver extends BroadcastReceiver {
                 if(onIncomingCallStarted.equals("1")){
                     //chk_onMissedCall.setChecked(true);
                     Function.sendSMS(ctx,number, str);
+                    Function.sendWAMessage(ctx,number.replace("+91", "") + "", str);
                 }
             }
         }
@@ -120,6 +125,7 @@ public class PhonecallReceiver extends BroadcastReceiver {
                 if(onOutgoingCallStarted.equals("1")){
                     //chk_onMissedCall.setChecked(true);
                     Function.sendSMS(ctx,number, str);
+                    Function.sendWAMessage(ctx,number.replace("+91", "") + "", str);
                 }
             }
         }
@@ -141,6 +147,7 @@ public class PhonecallReceiver extends BroadcastReceiver {
                 if(onIncomingCallEnded.equals("1")){
                     //chk_onMissedCall.setChecked(true);
                     Function.sendSMS(ctx,number, str);
+                    Function.sendWAMessage(ctx,number.replace("+91", "") + "", str);
                 }
             }
         }
@@ -158,6 +165,7 @@ public class PhonecallReceiver extends BroadcastReceiver {
                 if(onOutgoingCallEnded.equals("1")){
                     //chk_onMissedCall.setChecked(true);
                     Function.sendSMS(ctx,number, str);
+                    Function.sendWAMessage(ctx,number.replace("+91", "") + "", str);
                 }
             }
         }
@@ -175,6 +183,7 @@ public class PhonecallReceiver extends BroadcastReceiver {
                 if(onMissedCall.equals("1")){
                     //chk_onMissedCall.setChecked(true);
                     Function.sendSMS(ctx,number, str);
+                    Function.sendWAMessage(ctx,number.replace("+91", "") + "", str);
                 }
             }
         }

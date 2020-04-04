@@ -9,9 +9,12 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.ContactsContract;
+import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.telephony.SmsManager;
 import android.telephony.SubscriptionInfo;
@@ -107,6 +110,8 @@ public class Function {
         return gpList;
     }
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
     public static boolean sendSMS(Context c, String toPhoneNumber, String smsMessage) {
         try {
@@ -140,6 +145,33 @@ public class Function {
             return false;
         }
     }
+
+    public static void sendWAMessage(Context c, String strMobileNo, String smsMessage) {
+        try {
+            if (strMobileNo != null && !strMobileNo.equalsIgnoreCase("")) {
+                String strWhatsAppNo = "91" + strMobileNo; // E164 format without '+' sign
+                System.out.println("strWhatsAppNo: "+strWhatsAppNo);
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                //Bitmap picBitmap = BitmapFactory.decodeResource(mContext.getResources(),R.drawable.promoting_image);
+                //if (picBitmap != null) {
+                   /* String url = MediaStore.Images.Media.insertImage(mContext.getContentResolver(), picBitmap, "", "");
+                    intent.setType("image/*");
+                    intent.putExtra(Intent.EXTRA_STREAM, Uri.parse(url));*/
+                //} else {
+                    intent.setType("text/plain");
+               // }
+                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                intent.putExtra(Intent.EXTRA_TEXT, smsMessage);
+                intent.putExtra("jid", strWhatsAppNo + "@s.whatsapp.net"); //phone number without "+" prefix
+                intent.setPackage("com.whatsapp");
+                c.startActivity(intent);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
     public static String getContactbyPhoneNumber(Context c, String phoneNumber) {
 
