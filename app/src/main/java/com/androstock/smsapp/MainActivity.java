@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity
         fab_new = (FloatingActionButton) findViewById(R.id.fab_new);
 
         listView.setEmptyView(loader);
-        getSupportActionBar().setTitle("SMS");
+        getSupportActionBar().setTitle("Messages");
 
         setPref();
 

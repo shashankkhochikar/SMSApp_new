@@ -1,8 +1,10 @@
 package com.androstock.smsapp;
 
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -11,6 +13,7 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class smsTemplatesActivity extends AppCompatActivity {
@@ -28,6 +31,7 @@ public class smsTemplatesActivity extends AppCompatActivity {
     CheckBox chk_onOutgoingCallStarted;
     CheckBox chk_onOutgoingCallEnded;
     CheckBox chk_onMissedCall;
+    CheckBox chk_sendWAmsg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,9 +48,10 @@ public class smsTemplatesActivity extends AppCompatActivity {
         chk_onOutgoingCallStarted = (CheckBox)findViewById(R.id.onOutgoingCallStarted);
         chk_onOutgoingCallEnded = (CheckBox)findViewById(R.id.onOutgoingCallEnded);
         chk_onMissedCall = (CheckBox)findViewById(R.id.onMissedCall);
+        chk_sendWAmsg = (CheckBox)findViewById(R.id.sendWAmsg);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("Set Template");
+        getSupportActionBar().setTitle("Settings");
 
         pref = getApplicationContext().getSharedPreferences("SMSApp", MODE_PRIVATE); // 0 - for private mode
 
@@ -59,8 +64,12 @@ public class smsTemplatesActivity extends AppCompatActivity {
                     editor = pref.edit();
                     editor.putString("single_temp", template_message.getText().toString()); // Storing string
                     editor.commit();
-                    Toast.makeText(getApplicationContext(), "Message Updated", Toast.LENGTH_SHORT).show();
-                    finish();
+                    Toast toast = Toast.makeText(getApplicationContext(), "Message has been Updated", Toast.LENGTH_SHORT);
+                    View toastView = toast.getView(); // This'll return the default View of the Toast
+                    toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+                    toastView.setBackgroundColor(Color.CYAN);
+                    toast.show();
+                    //finish();
                 }
 
             }
@@ -77,8 +86,12 @@ public class smsTemplatesActivity extends AppCompatActivity {
                 editor.putString("def_sim", ""+pos1); // Storing string
                 editor.commit();
 
-                Toast.makeText(smsTemplatesActivity.this,radioButton.getText()+" set to default !! "+pos1, Toast.LENGTH_SHORT).show();
-                finish();
+                Toast toast = Toast.makeText(smsTemplatesActivity.this,radioButton.getText()+" has set to default SIM !!! ", Toast.LENGTH_SHORT);
+                View toastView = toast.getView(); // This'll return the default View of the Toast
+                toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+                toastView.setBackgroundColor(Color.CYAN);
+                toast.show();
+                //finish();
             }
         });
 
@@ -110,6 +123,22 @@ public class smsTemplatesActivity extends AppCompatActivity {
     }
 
     public void setListners(){
+        //setListner of sendWAMeassage
+        chk_sendWAmsg.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                if (isChecked){
+                    editor = pref.edit();
+                    editor.putString("sendWAmsg", "1"); // Storing string
+                    editor.commit();
+                }else {
+                    editor = pref.edit();
+                    editor.putString("sendWAmsg", "0"); // Storing string
+                    editor.commit();
+                }
+            }
+        });
+
         //setListner of onIncomingCallStarted
         chk_onIncomingCallStarted.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override

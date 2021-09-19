@@ -4,8 +4,10 @@ import android.accessibilityservice.AccessibilityService;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.support.v4.view.accessibility.AccessibilityNodeInfoCompat;
+import android.telecom.Call;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -31,24 +33,34 @@ public class WhatsappAccessibilityService extends AccessibilityService {
                 return;
             }
 
-            if(PhonecallReceiver.lastState >= 0 || PhonecallReceiver.lastState > 0) {
-                // Now fire a click on the send button
-                sendMessageButton.performAction(AccessibilityNodeInfo.ACTION_CLICK);
+            if (PhonecallReceiver.cuttStateFlag4WhatsappMsg != 0){
+                    if(PhonecallReceiver.cuttStateFlag4WhatsappMsg == 1 ||
+                        PhonecallReceiver.cuttStateFlag4WhatsappMsg == 2 ||
+                        PhonecallReceiver.cuttStateFlag4WhatsappMsg == 3 ||
+                        PhonecallReceiver.cuttStateFlag4WhatsappMsg == 4 ||
+                        PhonecallReceiver.cuttStateFlag4WhatsappMsg == 5 )
+                    {
 
-                Thread.sleep(1000); // hack for certain devices in which the immediate back click is too fast to handle
-                performGlobalAction(GLOBAL_ACTION_BACK);
-                Thread.sleep(1000);  // same hack as above
-                performGlobalAction(GLOBAL_ACTION_BACK);
-                /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    disableSelf();
-                }*/
-                PhonecallReceiver.lastState = -1;
+                        // Now fire a click on the send button
+                        sendMessageButton.performAction(AccessibilityNodeInfo.ACTION_CLICK);
+
+                        Thread.sleep(500); // hack for certain devices in which the immediate back click is too fast to handle
+                        performGlobalAction(GLOBAL_ACTION_BACK);
+                        Thread.sleep(500);  // same hack as above
+
+                        performGlobalAction(GLOBAL_ACTION_BACK);
+
+                        // Now go back to your app by clicking on the Android back button twice:
+                        // First one to leave the conversation screen
+                        // Second one to leave whatsapp
+                        PhonecallReceiver.cuttStateFlag4WhatsappMsg = 0;
+                    }else{
+                        Toast.makeText(getApplicationContext(),"SMSez App Error",Toast.LENGTH_LONG).show();
+                    }
+            }else{
+                //Toast.makeText(getApplicationContext(),"Error",Toast.LENGTH_LONG).show();
             }
 
-
-            // Now go back to your app by clicking on the Android back button twice:
-            // First one to leave the conversation screen
-            // Second one to leave whatsapp
 
 
         } catch (Exception e) {

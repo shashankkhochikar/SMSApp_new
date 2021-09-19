@@ -25,7 +25,7 @@ public class NewSmsActivity extends AppCompatActivity{
         address = (EditText) findViewById(R.id.address);
         message = (EditText) findViewById(R.id.message);
         send_btn = (Button) findViewById(R.id.send_btn);
-        getSupportActionBar().setTitle("New SMS");
+        getSupportActionBar().setTitle("New Message");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 

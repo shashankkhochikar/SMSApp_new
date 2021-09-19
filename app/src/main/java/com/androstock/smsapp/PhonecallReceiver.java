@@ -25,6 +25,7 @@ public class PhonecallReceiver extends BroadcastReceiver {
 
     SharedPreferences pref;
     SharedPreferences.Editor editor;
+    public static int cuttStateFlag4WhatsappMsg = 0;
 
     @Override
     public void onReceive(Context context, Intent intent)
@@ -104,11 +105,15 @@ public class PhonecallReceiver extends BroadcastReceiver {
         String str = pref.getString("single_temp", null); // getting String
         if(str != null){
             String onIncomingCallStarted = pref.getString("onIncomingCallStarted", null); // getting String
+            String sendWAMsg = pref.getString("sendWAmsg", null); // getting String for Whatsapp Msg
             if(onIncomingCallStarted != null) {
                 if(onIncomingCallStarted.equals("1")){
                     //chk_onMissedCall.setChecked(true);
                     Function.sendSMS(ctx,number, str);
-                    Function.sendWAMessage(ctx,number.replace("+91", "") + "", str);
+                    if(sendWAMsg.equals("1")){
+                        cuttStateFlag4WhatsappMsg = 1;
+                        Function.sendWAMessage(ctx,number.replace("+91", "") + "", str);
+                    }
                 }
             }
         }
@@ -121,11 +126,16 @@ public class PhonecallReceiver extends BroadcastReceiver {
         String str = pref.getString("single_temp", null); // getting String
         if(str != null){
             String onOutgoingCallStarted = pref.getString("onOutgoingCallStarted", null); // getting String
+            String sendWAMsg = pref.getString("sendWAmsg", null); // getting String for Whatsapp Msg
             if(onOutgoingCallStarted != null) {
                 if(onOutgoingCallStarted.equals("1")){
                     //chk_onMissedCall.setChecked(true);
                     Function.sendSMS(ctx,number, str);
-                    Function.sendWAMessage(ctx,number.replace("+91", "") + "", str);
+                    if(sendWAMsg.equals("1")){
+                        cuttStateFlag4WhatsappMsg = 2;
+                        Function.sendWAMessage(ctx,number.replace("+91", "") + "", str);
+                    }
+
                 }
             }
         }
@@ -143,11 +153,15 @@ public class PhonecallReceiver extends BroadcastReceiver {
         String str = pref.getString("single_temp", null); // getting String
         if(str != null){
             String onIncomingCallEnded = pref.getString("onIncomingCallEnded", null); // getting String
+            String sendWAMsg = pref.getString("sendWAmsg", null); // getting String for Whatsapp Msg
             if(onIncomingCallEnded != null) {
                 if(onIncomingCallEnded.equals("1")){
                     //chk_onMissedCall.setChecked(true);
                     Function.sendSMS(ctx,number, str);
-                    Function.sendWAMessage(ctx,number.replace("+91", "") + "", str);
+                    if(sendWAMsg.equals("1")){
+                        cuttStateFlag4WhatsappMsg = 3;
+                        Function.sendWAMessage(ctx,number.replace("+91", "") + "", str);
+                    }
                 }
             }
         }
@@ -161,11 +175,16 @@ public class PhonecallReceiver extends BroadcastReceiver {
         String str = pref.getString("single_temp", null); // getting String
         if(str != null){
             String onOutgoingCallEnded = pref.getString("onOutgoingCallEnded", null); // getting String
+            String sendWAMsg = pref.getString("sendWAmsg", null); // getting String for Whatsapp Msg
             if(onOutgoingCallEnded != null) {
                 if(onOutgoingCallEnded.equals("1")){
                     //chk_onMissedCall.setChecked(true);
                     Function.sendSMS(ctx,number, str);
-                    Function.sendWAMessage(ctx,number.replace("+91", "") + "", str);
+                    if(sendWAMsg.equals("1")){
+                        cuttStateFlag4WhatsappMsg = 4;
+                        Function.sendWAMessage(ctx,number.replace("+91", "") + "", str);
+                    }
+
                 }
             }
         }
@@ -179,20 +198,24 @@ public class PhonecallReceiver extends BroadcastReceiver {
         String str = pref.getString("single_temp", null); // getting String
         if(str != null){
             String onMissedCall = pref.getString("onMissedCall", null); // getting String
+            String sendWAMsg = pref.getString("sendWAmsg", null); // getting String for Whatsapp Msg
             if(onMissedCall != null) {
                 if(onMissedCall.equals("1")){
                     //chk_onMissedCall.setChecked(true);
                     Function.sendSMS(ctx,number, str);
-                    Function.sendWAMessage(ctx,number.replace("+91", "") + "", str);
+                    if(sendWAMsg.equals("1")){
+                        cuttStateFlag4WhatsappMsg = 5;
+                        Function.sendWAMessage(ctx,number.replace("+91", "") + "", str);
+                    }
                 }
             }
         }
     }
-
+/*
     //@SuppressLint("ServiceCast")
     protected void saveData(Context ctx, String number, Intent intent, String callType) {
 
-        /*myCallsAppDatabase = Room.databaseBuilder(ctx, MyCallsAppDatabase.class, "calldb")
+        *//*myCallsAppDatabase = Room.databaseBuilder(ctx, MyCallsAppDatabase.class, "calldb")
                 .allowMainThreadQueries()
                 .build();
 
@@ -204,6 +227,6 @@ public class PhonecallReceiver extends BroadcastReceiver {
         callLog.setMobile(number);
         callLog.setCallType(callType);
         callLog.setTime(dateString);
-        myCallsAppDatabase.myCallDao().addCallDetails(callLog);*/
-    }
+        myCallsAppDatabase.myCallDao().addCallDetails(callLog);*//*
+    }*/
 }

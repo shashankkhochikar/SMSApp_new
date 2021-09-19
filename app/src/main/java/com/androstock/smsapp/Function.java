@@ -114,6 +114,8 @@ public class Function {
 
 
     public static boolean sendSMS(Context c, String toPhoneNumber, String smsMessage) {
+        String SMS_SEND_ACTION = "CTS_SMS_SEND_ACTION";
+         String SMS_DELIVERY_ACTION = "CTS_SMS_DELIVERY_ACTION";
         try {
             /*int smsToSendFrom = simCardList.get(0); //assign your desired sim to send sms, or user selected choice
             SmsManager.getSmsManagerForSubscriptionId(smsToSendFrom)
@@ -123,7 +125,23 @@ public class Function {
             String str = pref.getString("def_sim", null); // getting String
             if(str != null){
                 SmsManager smsManager = SmsManager.getDefault();
-                smsManager.getSmsManagerForSubscriptionId(Integer.parseInt(str)+1).sendTextMessage(toPhoneNumber, null, smsMessage, null, null);
+                smsManager.getSmsManagerForSubscriptionId(Integer.parseInt(str)+1);
+
+                //SmsManager sm = SmsManager.getDefault();
+                ArrayList<String> parts =smsManager.divideMessage(smsMessage);
+                int numParts = parts.size();
+
+                ArrayList<PendingIntent> sentIntents = new ArrayList<PendingIntent>();
+                ArrayList<PendingIntent> deliveryIntents = new ArrayList<PendingIntent>();
+
+                for (int i = 0; i < numParts; i++) {
+                    sentIntents.add(PendingIntent.getBroadcast(c, 0, new Intent(SMS_SEND_ACTION), 0));
+                    deliveryIntents.add(PendingIntent.getBroadcast(c, 0, new Intent(SMS_DELIVERY_ACTION), 0));
+                }
+
+                smsManager.sendMultipartTextMessage(toPhoneNumber,null, parts, sentIntents, deliveryIntents);
+
+                //smsManager.sendTextMessage(toPhoneNumber, null, smsMessage, null, null);
             }
             /*final SubscriptionManager subscriptionManager = SubscriptionManager.from(c);
             if (ActivityCompat.checkSelfPermission(c, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {

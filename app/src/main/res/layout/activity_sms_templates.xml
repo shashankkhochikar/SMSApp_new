@@ -1,80 +1,146 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="15dp">
-    <EditText
-        android:id="@+id/template_message"
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        android:hint="Message"
-        />
-    <Button
-        android:id="@+id/set_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@color/colorAccent"
-        android:textColor="#FFFFFF"
-        android:text="SET"/>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <RadioGroup
-        android:id="@+id/radioGrpSim"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp">
+    <ScrollView
+        android:layout_height="match_parent"
+        android:layout_width="match_parent">
 
-        <RadioButton
-            android:id="@+id/radioSim1"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="15dp">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#FF0000"
+                android:textStyle="normal"
+                android:textAlignment="center"
+                android:text="your carrier may charge for SMS messages
+used to Promotional Message"
+                android:layout_marginBottom="5dp"/>
+
+
+            <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="sim 1"
-            android:checked="true" />
+            android:weightSum="3">
+            <TextView
+                android:id="@+id/header"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Select SIM:"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:layout_gravity="center"/>
 
-        <RadioButton
-            android:id="@+id/radioSim2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="sim 2" />
+            <RadioGroup
+                android:id="@+id/radioGrpSim"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_weight="1">
 
-    </RadioGroup>
+                <RadioButton
+                    android:id="@+id/radioSim1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="SIM 1"
+                    android:checked="true" />
 
-    <Button
-        android:id="@+id/btnSetSim"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Set"
-        android:background="@color/colorAccent"
-        android:textColor="#FFFFFF"
-        />
+                <RadioButton
+                    android:id="@+id/radioSim2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="SIM 2" />
 
-    <CheckBox
-        android:id="@+id/onIncomingCallStarted"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Send SMS on incoming call started" />
+            </RadioGroup>
+            <Button
+                android:id="@+id/btnSetSim"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="Set SIM"
+                android:background="@drawable/my_button_bg"
+                android:textColor="@color/colorPrimary"
+                android:layout_weight="1"/>
 
-    <CheckBox
-        android:id="@+id/onIncomingCallEnded"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Send SMS on incoming call ended" />
+        </LinearLayout>
 
-    <CheckBox
-        android:id="@+id/onOutgoingCallStarted"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Send SMS on outgoing call started" />
 
-    <CheckBox
-        android:id="@+id/onOutgoingCallEnded"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Send SMS on outgoing call ended" />
 
-    <CheckBox
-        android:id="@+id/onMissedCall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Send SMS on missed call" />
+            <android.support.design.widget.TextInputLayout
+               android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp">
+                <EditText
+                    android:id="@+id/template_message"
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:hint="Type Promotional Message to Send"/>
+            </android.support.design.widget.TextInputLayout>
 
-</LinearLayout>
+            <Button
+                android:id="@+id/set_btn"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@drawable/my_button_bg"
+                android:textColor="@color/colorPrimary"
+                android:text="SET Message"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorPrimary"
+                android:textStyle="bold"
+                android:textAlignment="center"
+                android:text="Choose Process when you want to send message .."
+                android:layout_marginTop="10dp"/>
+
+            <CheckBox
+                android:id="@+id/sendWAmsg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Alse Promote on WhatsApp"
+                android:textColor="@color/colorPrimary"
+                android:textStyle="bold"/>
+
+            <CheckBox
+                android:id="@+id/onIncomingCallStarted"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Send Message on incoming call started" />
+
+            <CheckBox
+                android:id="@+id/onIncomingCallEnded"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Send Message on incoming call ended" />
+
+            <CheckBox
+                android:id="@+id/onOutgoingCallStarted"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Send Message on outgoing call started" />
+
+            <CheckBox
+                android:id="@+id/onOutgoingCallEnded"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Send Message on outgoing call ended" />
+
+            <CheckBox
+                android:id="@+id/onMissedCall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Send Message on missed call" />
+
+        </LinearLayout>
+    </ScrollView>
+
+</RelativeLayout>
